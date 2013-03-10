@@ -29,8 +29,11 @@ class UniqueObjectValidator extends ConstraintValidator
     {
         $fields      = (array) $constraint->fields;
         $class       = get_class($object);
-        $peerClass   = $class . 'Peer';
+        $peerClass   = $class::PEER;
         $queryClass  = $class . 'Query';
+        if (!class_exists($queryClass)) {
+            $queryClass = substr($peerClass,0,-4) . 'Query';
+        }
         $classFields = $peerClass::getFieldNames(\BasePeer::TYPE_FIELDNAME);
 
         foreach ($fields as $fieldName) {
